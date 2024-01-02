@@ -14,43 +14,70 @@ namespace BlogProjesi.SERVICE.Services.AppUserService
 	public class AppUserService : IAppUserService
 	{
 		private readonly UserManager<AppUser> _userManager;
-		private readonly SignInManager<AppUser> signInManager;
+		private readonly SignInManager<AppUser> _signInManager;
 		private readonly IMapper _mapper;
-		private readonly IAppUserRepository _userRepository;
+		private readonly IAppUserRepository _appUserRepository;
 
-		public AppUserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper, IAppUserRepository userRepository) 
+		public AppUserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper, IAppUserRepository appUserRepository)
 		{
 			_userManager = userManager;
-			this.signInManager = signInManager;
+			_signInManager = signInManager;
 			_mapper = mapper;
-			_userRepository = userRepository;
+			_appUserRepository = appUserRepository;
 		}
 
 		public async Task<UpdateProfileDTO> GetById(string id)
 		{
-			var user = await _userRepository.GetDefault(x=>x.Id == id);
+			var user = await _appUserRepository.GetDefault(x=>x.Id == id);
 			var model = _mapper.Map<UpdateProfileDTO>(user);
 			return model;
 		}
 
-		public Task<SignInResult> Login(LoginDTO model)
+		public async Task<SignInResult> Login(LoginDTO model)
 		{
-			throw new NotImplementedException();
+			var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
+			return result;
 		}
 
-		public Task LogOut()
+		public async Task LogOut()
 		{
-			throw new NotImplementedException();
+			await _signInManager.SignOutAsync();
 		}
 
-		public Task<IdentityResult> Register(RegisterDTO model)
+		public async Task<IdentityResult> Register(RegisterDTO model)
 		{
-			throw new NotImplementedException();
+			var user = _mapper.Map<AppUser>(model);
+
+			var result = await _userManager.CreateAsync(user);
+
+			if (result.Succeeded)
+			{
+				await _signInManager.SignInAsync(user, false);
+			}
+			
+			return result;
+			
+
 		}
 
-		public Task UpdateUser(UpdateProfileDTO model)
+		public async Task UpdateUser(UpdateProfileDTO model)
 		{
-			throw new NotImplementedException();
+			var user = _mapper.Map<AppUser>(model);
+
+			if (model != null)
+			{
+				_appUserRepository.Update(user);
+			}
+			if (model.Password != null)
+			{
+				user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, model.Password);
+			}
+			if (model.UserName != null)
+			{
+				await _userManager.SetEmailAsync(user, model.UserName);
+				await _userManager.SetUserNameAsync(user, model.UserName);
+				await _signInManager.SignInAsync(user, false);
+			}
 		}
 	}
 }

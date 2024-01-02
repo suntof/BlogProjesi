@@ -15,9 +15,4 @@
     <ProjectReference Include="..\BlogProjesi.REPO\BlogProjesi.REPO.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\ArticleServise\" />
-    <Folder Include="Services\NewFolder\" />
-  </ItemGroup>
-
 </Project>

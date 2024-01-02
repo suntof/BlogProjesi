@@ -18,6 +18,11 @@ namespace BlogProjesi.SERVICE.Mapping
 			CreateMap<Genre, UpdateGenreDTO>().ReverseMap();
 			CreateMap<Genre, GetGenreVM>().ReverseMap();
 
+			CreateMap<AppUser, RegisterDTO>().ReverseMap();
+			CreateMap<AppUser, LoginDTO>().ReverseMap();
+			CreateMap<AppUser, UpdateProfileDTO>().ReverseMap();
+
+			CreateMap<Article, CreateArticleDTO>().ReverseMap();
 		}
 
 	}
