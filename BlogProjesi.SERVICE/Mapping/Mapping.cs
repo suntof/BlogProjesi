@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BlogProjesi.CORE.Entities;
 using BlogProjesi.SERVICE.Models.DTOs;
+using BlogProjesi.SERVICE.Models.DTOs.CommentDTOs;
 using BlogProjesi.SERVICE.Models.VMs;
 
 namespace BlogProjesi.SERVICE.Mapping
@@ -23,6 +24,10 @@ namespace BlogProjesi.SERVICE.Mapping
 			CreateMap<AppUser, UpdateProfileDTO>().ReverseMap();
 
 			CreateMap<Article, CreateArticleDTO>().ReverseMap();
+
+			CreateMap<Comment, CreateCommentDTO>().ReverseMap();
+			CreateMap<Comment, UpdateCommentDTO>().ReverseMap();
+			CreateMap<Comment, GetCommentVM>().ReverseMap();
 		}
 
 	}

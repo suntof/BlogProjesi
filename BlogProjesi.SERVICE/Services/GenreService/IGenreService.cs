@@ -13,6 +13,7 @@ namespace BlogProjesi.SERVICE.Services.GenreService
 		Task Create(CreateGenreDTO model);
 		void Update(UpdateGenreDTO model);
 		Task Delete(int id);
+
 		Task<GetGenreVM> GetById(int id);
 
 		Task<List<GetGenreVM>> GetGenres();
